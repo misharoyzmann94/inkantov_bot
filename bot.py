@@ -16,6 +16,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(answer)
         return
 
+    if text.endswith("внизу?"):
+        answer = random.choice(["я в инканто", "я в новом белграде"])
+        await update.message.reply_text(answer)
+        return
+
     if text.endswith("?"):
         await update.message.reply_text("это вопрос")
         return
@@ -29,4 +34,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT, handle_message))
+app.run_polling()
+
+app = ApplicationBuilder().token(TOKEN).build()
+app.add_handler(MessageHandler(filters.TEXT, handle_message))
+
 app.run_polling()
