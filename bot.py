@@ -54,10 +54,11 @@ flask_app = Flask(__name__)
 def home():
     return "Bot is running"
 
-if name == "__main__":
+if __name__ == "__main__":
     # Запускаем бота в отдельном потоке
     threading.Thread(target=run_bot).start()
 
     # Запускаем веб-сервер (Render требует порт)
     port = int(os.environ.get("PORT", 10000))
     flask_app.run(host="0.0.0.0", port=port)
+
