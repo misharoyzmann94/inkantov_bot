@@ -1,5 +1,6 @@
 import os
 import random
+import asyncio
 import threading
 from flask import Flask
 from telegram import Update
@@ -7,7 +8,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 
 TOKEN = "8344105309:AAFs_r2ItZOp2lTAp4KtVxInOEldm_JUR-g"
 
-# --- Telegram bot logic ---
+# --- Telegram логика ---
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
@@ -41,12 +42,16 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if text.endswith("!"):
         await update.message.reply_text("не ори")
 
-def run_bot():
+async def run_bot():
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(MessageHandler(filters.ALL, handle_message))
-    app.run_polling()
+    print("BOT STARTED")
+    await app.run_polling()
 
-# --- Fake web server for Render ---
+def start_bot():
+    asyncio.run(run_bot())
+
+# --- Flask сервер для Render ---
 
 flask_app = Flask(__name__)
 
@@ -55,10 +60,6 @@ def home():
     return "Bot is running"
 
 if __name__ == "__main__":
-    # Запускаем бота в отдельном потоке
-    threading.Thread(target=run_bot).start()
-
-    # Запускаем веб-сервер (Render требует порт)
+    threading.Thread(target=start_bot, daemon=True).start()
     port = int(os.environ.get("PORT", 10000))
     flask_app.run(host="0.0.0.0", port=port)
-
