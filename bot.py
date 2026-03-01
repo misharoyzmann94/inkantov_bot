@@ -31,17 +31,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if text.endswith("?"):
-    if random.random() < 0.5:   # 50% шанс ответа
-        await update.message.reply_text("это вопрос")
-    return
+        if random.random() < 0.5:
+            await update.message.reply_text("это вопрос")
+        return
 
     if text.endswith("."):
-    await update.message.reply_text("это не вопрос")
+        if random.random() < 0.5:
+            await update.message.reply_text("это не вопрос")
     return
 
     if text.endswith("!"):
-    if random.random() < 0.5:   # 50% шанс ответа
-        await update.message.reply_text("не ори")
+        if random.random() < 0.5:   # 50% шанс ответа
+            await update.message.reply_text("не ори")
 
 # --- Flask сервер для Render ---
 
@@ -64,4 +65,5 @@ if __name__ == "__main__":
     app.add_handler(MessageHandler(filters.ALL, handle_message))
     print("BOT STARTED")
     app.run_polling()
+
 
